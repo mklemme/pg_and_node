@@ -30,10 +30,20 @@ db.query("SELECT * FROM books;", function(err, resultSet){
     console.log(resultSet.rows);
 });
 
-db.query("INSERT INTO books (title, author) VALUES ($1, $2) RETURNING *",
+db.query("INSERT INTO books (title, author) VALUES ($1, $2) RETURNING *;",
 ["The Great Gatsby", "Fitzgerald"], function(err, resultSet){
   if (err) console.log("INSERT FAILED :-(", err);
-  console.log(resultSet.rows);
+  console.log("resultSet.rows");
+});
+
+db.query("DELETE FROM books WHERE title =$1;", ["The Great Gatsby"], function(err, resultSet){
+  if (err) console.log("DELETE FAILED :-(", err);
+  console.log("resultSet.rows");
+});
+
+db.query("UPDATE books SET title =$1 WHERE title =$2;", ["The Ordinary Gatsby","The Great Gatsby"], function(err, resultSet){
+  if (err) console.log("UPDATE FAILED :-(", err);
+  console.log("resultSet.rows");
 });
 
 pg.end();
