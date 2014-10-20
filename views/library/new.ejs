@@ -1,0 +1,44 @@
+<% include ../partials/header %>
+<h1>Create a new book</h1>
+  <form action="/books" method="post" class="pure-form">
+    <div class="pure-g formItem">
+      <label for="title" class="pure-u-1-2">Title</label>
+      <input name="book[title]" id="title" placeholder="title" class="pure-u-1-2" autofocus>
+    </div>
+    <div class="pure-g formItem">
+      <label for="author" class="pure-u-1-2">Author</label>
+      <input name="book[author]" id="author" placeholder="author" class="pure-u-1-2">
+    </div>
+    <div class="pure-g formItem">
+      <label for="coverColor" class="pure-u-1-2">Choose a color for the book's cover:</label>
+      <div class="pure-u-1-2">
+        <div class="pure-u-1">
+          <input type="radio" name="book[color]" id="coverColor" value="red" checked> <label for="coverColor">Red</label>
+        </div>
+        <div class="pure-u-1">
+          <input type="radio" name="book[color]" id="coverColorBlue" value="blue"> <label for="coverColorBlue">Blue</label>
+        </div>
+        <div class="pure-u-1">
+          <input type="radio" name="book[color]" id="coverColorGreen" value="green"> <label for="coverColorGreen">Green</label>
+        </div>
+        <div class="pure-u-1">
+          <input type="radio" name="book[color]" id="coverColorTeal" value="teal"> <label for="coverColorTeal">Teal</label>
+        </div>
+        <div class="pure-u-1">
+          <input type="radio" name="book[color]" id="coverColorPurple" value="purple"> <label for="coverColorPurple">Purple</label>
+        </div>
+
+
+
+      </div>
+    </div>
+    <div class="pure-g">
+      <div class="pure-u-1-2 action">
+        <a href="/books" class=" actionButton cancel">cancel</a>
+      </div>
+      <div class="pure-u-1-2 action">
+        <input type="submit" value="Save" class="actionButton">
+      </div>
+    </div>
+  </form>
+<% include ../partials/footer %>

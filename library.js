@@ -4,10 +4,11 @@ var DB = require('./mydb_lib.js');
 
 var db = new DB("library_example_app", 5432, "localhost");
 
-function Book(title, author, id) {
+function Book(title, author, id, color) {
   this.id = id;
   this.title = title;
   this.author = author;
+  this.color = color;
 }
 
 function Library() {
@@ -19,17 +20,17 @@ Library.prototype.all = function(buzzer) {
    db.query("SELECT * FROM books;", [], function(err, resultSet){
     if (err) console.log("QUERY FAILED", err);
     resultSet.rows.forEach(function(row){
-    	var aBook = new Book(row.title, row.author, row.id);
+    	var aBook = new Book(row.title, row.author, row.id, row.color);
  			allBooks.push(aBook);
     });
-    console.log(allBooks);
+    //console.log(allBooks);
     buzzer(allBooks);
 	});
 };
 
-Library.prototype.add = function(bookTitle, bookAuthor, buzzer) {
+Library.prototype.add = function(bookTitle, bookAuthor, color, buzzer) {
   var newBook;
-	db.query("INSERT INTO books (title, author) VALUES ($1, $2);", [bookTitle, bookAuthor], function(err, resultSet){
+	db.query("INSERT INTO books (title, author, color) VALUES ($1, $2, $3);", [bookTitle, bookAuthor, color], function(err, resultSet){
     if (err) console.log("INSERT FAILED :-(", err);
     //console.log(bookTitle, bookAuthor);
     buzzer(resultSet);
@@ -45,11 +46,10 @@ Library.prototype.destroy = function(id, buzzer) {
   });
 };
 
-Library.prototype.update = function(id, title, author, buzzer) {
-  db.query("UPDATE books SET author = ($1), title = ($2) WHERE id = ($3);",[author, title, id],
+Library.prototype.update = function(id, bookTitle, bookAuthor, color, buzzer) {
+  db.query("UPDATE books SET title = ($1), author = ($2), color = ($3) WHERE id = ($4);",[bookTitle, bookAuthor, color, id],
     function(err, resultSet){
       if (err) console.log("Update FAILED :-(", err);
-      console.log("book " + id + " updated with" + title + author);
       buzzer();
   });
 

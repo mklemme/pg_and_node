@@ -1,21 +1,34 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>Title</title>
-<!--   <meta name="description" content="">
-  <meta name="author" content=""> -->
-  <link rel="stylesheet" href="">
-</head>
-<body>
-  <h1>All my books!</h1>
-  <a href="/books/new">Add a new Book</a>
-  <% allBooks.forEach(function(book){ %>
-    <p><%= book.title %> by <%= book.author %></p>
-    <form action="/books/<%= book.id %>?_method=delete" method="post">
-    	<input type="submit" value="Delete">
-    </form>
-    <a href="/books/<%= book.id %>/edit">Edit</a>
-  <% }); %>
-</body>
-</html>
+<% include ../partials/header %>
+<div class="pure-g pageHeader">
+  <div class="pure-u-1-2">
+    <p class="pageTitle">
+      <span>Words on pages</span>
+      Your library
+    </p>
+  </div>
+  <div class="pure-u-1-2 actionWrapper">
+    <a href="/books/new" class="cta ctaNew">Add a new Book</a>
+  </div>
+</div>
+</div>
+</div>
+  <div class="pure-g">
+    <% allBooks.forEach(function(book){ %>
+      <div class="pure-u-1-4 bookSingle">
+        <div class="bookCover <%= book.color %>"></div>
+          <p class="bookTitle">
+            <a href="/books/<%= book.id %>"><%= book.title %></a>
+          </p>
+          <p class="bookAuthor">
+            By: <%= book.author %>
+          </p>
+          <hr>
+          <div class="meta">
+            <a href="/books/<%= book.id %>/edit">edit</a>
+            <span>&middot;</span>
+            <a href="#">delete</a>
+          </div>
+      </div>
+    <% }); %>
+  </div>
+<% include ../partials/footer %>

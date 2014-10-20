@@ -6,23 +6,27 @@ var express = require('express'),
     methodOverride = require('method-override'),
     Library = require('./library.js');
 
-app.set('view engine', 'ejs');
-app.use(bodyParser.urlencoded({extended: true}));
+
+app.set("view engine", "ejs");
+app.use(express.static(__dirname + '/public'));
+app.use(bodyParser.urlencoded({entended:true}));
 app.use(methodOverride('_method'));
 
 var library = new Library();
-
+var bodyClass = "library";
 //Home
 app.get('/', function(req, res){
-  res.render('home');
+  bodyClass = "home";
+  res.render('home', {bodyClass : bodyClass});
 });
 
 //Index
 app.get('/books', function(req, res){
   //DONE!
+  bodyClass = "library";
   console.log("/BOOKS")
   library.all( function(allBooks){
-    res.render('library/index', {allBooks: allBooks});
+    res.render('library/index', {allBooks: allBooks, bodyClass : bodyClass});
   });
 
 });
@@ -30,15 +34,16 @@ app.get('/books', function(req, res){
 //New
 app.get('/books/new', function(req, res){
   //DONE
-	res.render("library/new");
+  bodyClass = "library";
+	res.render("library/new", {bodyClass : bodyClass});
 });
 
 //Create
 app.post('/books', function(req, res) {
   var title = req.body.book.title;
   var author = req.body.book.author;
-
-  library.add(title, author, function(newBook){
+  var color = req.body.book.color;
+  library.add(title, author, color, function(newBook){
     console.log(newBook);
     res.redirect('/books');
   });
@@ -46,21 +51,21 @@ app.post('/books', function(req, res) {
 
 //Show
 app.get('/books/:id', function(req, res) {
+  bodyClass = "library";
   var id = Number(req.params.id);
-
   library.findById(id, function(result){
-    console.log(result);
-    res.send("implement show book. showing book " + result[0].title);
+    var book = result[0];
+    res.render('library/single.ejs', {book : book, bodyClass : bodyClass});
   });
 });
 
 //Edit
 app.get('/books/:id/edit', function(req, res) {
 	var id = req.params.id;
-
+  bodyClass = "library";
   library.findById(id, function(result){
     var book = result[0];
-    res.render('library/edit',{book : book});
+    res.render('library/edit',{book : book, bodyClass : bodyClass});
   });
 });
 
@@ -69,7 +74,8 @@ app.put('/books/:id', function(req, res) {
   var id = req.params.id;
   var title = req.body.book.title;
   var author = req.body.book.author;
-  library.update(id, title, author, function(result){
+  var color = req.body.book.color;
+  library.update(id, title, author, color, function(result){
     res.redirect('/books');
   });
 });
