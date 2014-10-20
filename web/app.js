@@ -21,8 +21,10 @@ app.get('/', function(req, res){
 app.get('/books', function(req, res){
   //DONE!
   console.log("/BOOKS")
-  var leBooks = library.all();
-  res.render('library/index', {allBooks: leBooks});
+  library.all( function(allBooks){
+    res.render('library/index', {allBooks: allBooks});
+  });
+
 });
 
 //New
@@ -33,49 +35,56 @@ app.get('/books/new', function(req, res){
 
 //Create
 app.post('/books', function(req, res) {
-	//TODO
-  console.log("/books -> Implement me.");
-  // library.add ....
-  res.redirect('/books'); 
+  var title = req.body.book.title;
+  var author = req.body.book.author;
+
+  library.add(title, author, function(newBook){
+    console.log(newBook);
+    res.redirect('/books');
+  });
 });
 
 //Show
 app.get('/books/:id', function(req, res) {
-  var id = req.params.id;
-  //TODO
-  console.log("/books -> Implement me.");
-  // library.findById ...
-  // Add library/show.ejs page and render it with found book
-  // Add "Show" link on '/books' page.
-  res.send("implement show book. showing book " + req.params.id);
+  var id = Number(req.params.id);
+
+  library.findById(id, function(result){
+    console.log(result);
+    res.send("implement show book. showing book " + result[0].title);
+  });
 });
 
 //Edit
 app.get('/books/:id/edit', function(req, res) {
 	var id = req.params.id;
-  //TODO
-  console.log("/books/:id/edit -> Implement me.");
-  // library.findById ...
-  var foundBook = {};
-  res.render('library/edit', {book: foundBook});
+
+  library.findById(id, function(result){
+    var book = result[0];
+    res.render('library/edit',{book : book});
+  });
 });
 
 //Update
 app.put('/books/:id', function(req, res) {
-	var id = req.params.id;
-  //TODO
-  console.log("/books/:id -> Implement me.");
-  // library.update ...
-  res.redirect('/books');
+  var id = req.params.id;
+  var title = req.body.book.title;
+  var author = req.body.book.author;
+  library.update(id, title, author, function(result){
+    res.redirect('/books');
+  });
 });
 
 //Delete
 app.delete('/books/:id', function(req, res) {
 	var id = req.params.id;
-  //TODO
-  // library.destroy ...
-  res.redirect('/books');
+
+  library.destroy(id, function(result){
+    res.redirect('/books');
+  });
 });
+
+
+
 
 var server = app.listen(3000, function() {
     console.log('Listening on port %d', server.address().port);
